@@ -1,3 +1,8 @@
+<?php
+session_start();
+$error_message = $_SESSION['error_message'] ?? '';
+unset($_SESSION['error_message']);
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -66,6 +71,15 @@
         .back-link a:hover {
             text-decoration: underline;
         }
+        
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body>
@@ -77,15 +91,17 @@
     <div class="container">
         <div class="login-container">
             <h2>Connexion</h2>
+            
+            <?php if (!empty($error_message)): ?>
+                <div class="error-message">
+                    <?php echo htmlspecialchars($error_message); ?>
+                </div>
+            <?php endif; ?>
+            
             <form action="login.php" method="POST">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="email" id="email" name="email" required placeholder="votre@email.com">
                 </div>
                 
                 <button type="submit" class="btn-submit">Se connecter</button>
