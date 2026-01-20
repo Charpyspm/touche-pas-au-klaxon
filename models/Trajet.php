@@ -14,10 +14,12 @@ class Trajet {
         $query = "SELECT 
                     t.*,
                     a_depart.nom as ville_depart,
-                    a_arrivee.nom as ville_destination
+                    a_arrivee.nom as ville_destination,
+                    CONCAT(u.prenom, ' ', u.nom) as conducteur_nom
                   FROM " . $this->table . " t
                   LEFT JOIN agences a_depart ON t.agence_depart_id = a_depart.id
                   LEFT JOIN agences a_arrivee ON t.agence_arrivee_id = a_arrivee.id
+                  LEFT JOIN users u ON t.user_id = u.id
                   ORDER BY t.date_depart ASC";
         
         $stmt = $this->conn->prepare($query);
