@@ -1,12 +1,30 @@
 <?php
+/**
+ * Point d'entrée principal de l'application
+ * 
+ * Front Controller qui gère le routage de toutes les requêtes
+ * 
+ * @package TouchePasAuKlaxon
+ * @author Votre Nom
+ * @version 1.0
+ */
+
 session_start();
 
-// Routeur simple MVC
+/**
+ * Routeur simple MVC
+ * 
+ * Traite le paramètre 'action' de l'URL pour déterminer quelle action exécuter
+ */
 $action = $_GET['action'] ?? 'home';
 
 // Router les actions
 switch ($action) {
-    // Routes d'authentification
+    /**
+     * Routes d'authentification
+     * 
+     * Gèrent la connexion et déconnexion des utilisateurs
+     */
     case 'login':
         require_once __DIR__ . '/controllers/AuthController.php';
         $controller = new AuthController();
@@ -23,7 +41,11 @@ switch ($action) {
         $controller->logout();
         break;
     
-    // Routes des trajets
+    /**
+     * Routes des trajets
+     * 
+     * CRUD complet pour les trajets de covoiturage
+     */
     case 'create':
         require_once __DIR__ . '/controllers/TrajetController.php';
         $controller = new TrajetController();
@@ -60,7 +82,11 @@ switch ($action) {
         $controller->details();
         break;
     
-    // Route pour récupérer la liste des utilisateurs (admin)
+    /**
+     * Route API - Liste des utilisateurs (admin uniquement)
+     * 
+     * Retourne un JSON avec tous les utilisateurs
+     */
     case 'users':
         require_once __DIR__ . '/models/User.php';
         
@@ -78,7 +104,11 @@ switch ($action) {
         echo json_encode(['success' => true, 'users' => $users]);
         exit;
     
-    // Routes pour la gestion des agences (admin)
+    /**
+     * Route API - Liste des agences (admin uniquement)
+     * 
+     * Retourne un JSON avec toutes les agences
+     */
     case 'agences':
         require_once __DIR__ . '/models/Agence.php';
         
@@ -96,7 +126,11 @@ switch ($action) {
         echo json_encode(['success' => true, 'agences' => $agences]);
         exit;
     
-    // Route pour récupérer tous les trajets (admin)
+    /**
+     * Route API - Liste complète des trajets (admin uniquement)
+     * 
+     * Retourne tous les trajets y compris ceux sans places disponibles
+     */
     case 'trajets_admin':
         require_once __DIR__ . '/models/Trajet.php';
         
@@ -114,6 +148,11 @@ switch ($action) {
         echo json_encode(['success' => true, 'trajets' => $trajets]);
         exit;
     
+    /**
+     * Route API - Création d'une agence (admin uniquement)
+     * 
+     * Crée une nouvelle agence dans la base de données
+     */
     case 'agence_create':
         require_once __DIR__ . '/models/Agence.php';
         
@@ -138,6 +177,11 @@ switch ($action) {
         echo json_encode(['success' => $result]);
         exit;
     
+    /**
+     * Route API - Modification d'une agence (admin uniquement)
+     * 
+     * Met à jour le nom d'une agence existante
+     */
     case 'agence_update':
         require_once __DIR__ . '/models/Agence.php';
         
@@ -163,6 +207,11 @@ switch ($action) {
         echo json_encode(['success' => $result]);
         exit;
     
+    /**
+     * Route API - Suppression d'une agence (admin uniquement)
+     * 
+     * Supprime une agence si elle n'est pas utilisée dans des trajets
+     */
     case 'agence_delete':
         require_once __DIR__ . '/models/Agence.php';
         
@@ -193,7 +242,11 @@ switch ($action) {
         echo json_encode(['success' => $result]);
         exit;
     
-    // Route par défaut (page d'accueil)
+    /**
+     * Route par défaut - Page d'accueil
+     * 
+     * Affiche la liste des trajets disponibles
+     */
     case 'home':
     default:
         require_once __DIR__ . '/controllers/TrajetController.php';

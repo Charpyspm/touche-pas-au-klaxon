@@ -1,15 +1,47 @@
 <?php
+/**
+ * Fichier du modèle Trajet
+ * 
+ * Gère toutes les opérations liées aux trajets de covoiturage
+ * 
+ * @package TouchePasAuKlaxon
+ * @author Votre Nom
+ * @version 1.0
+ */
+
 require_once __DIR__ . '/../config/database.php';
 
+/**
+ * Classe Trajet
+ * 
+ * Modèle pour la gestion des trajets de covoiturage
+ */
 class Trajet {
+    /**
+     * @var PDO Connexion à la base de données
+     */
     private $conn;
+    
+    /**
+     * @var string Nom de la table
+     */
     private $table = 'trajets';
     
+    /**
+     * Constructeur de la classe Trajet
+     * 
+     * Initialise la connexion à la base de données
+     */
     public function __construct() {
         $database = new Database();
         $this->conn = $database->getConnection();
     }
     
+    /**
+     * Récupère tous les trajets avec les informations des agences et conducteurs
+     * 
+     * @return array<int, array<string, mixed>> Tableau contenant tous les trajets triés par date de départ
+     */
     public function getAllTrajets() {
         $query = "SELECT 
                     t.*,
@@ -28,6 +60,11 @@ class Trajet {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
+    /**
+     * Récupère uniquement les trajets avec des places disponibles
+     * 
+     * @return array<int, array<string, mixed>> Tableau contenant les trajets disponibles triés par date de départ
+     */
     public function getAvailableTrajets() {
         $query = "SELECT 
                     t.*,
@@ -47,6 +84,12 @@ class Trajet {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
+    /**
+     * Récupère un trajet par son ID avec toutes les informations détaillées
+     * 
+     * @param int $id L'identifiant du trajet
+     * @return array<string, mixed>|false Les données complètes du trajet ou false si non trouvé
+     */
     public function getTrajetById($id) {
         $query = "SELECT 
                     t.*,
