@@ -63,6 +63,12 @@
                     <input type="email" id="email" name="email" class="form-control" placeholder="Votre email" required>
                 </div>
                 
+                <div class="mb-3">
+                    <label for="password" class="form-label fw-bold"><i class="bi bi-lock"></i> Mot de passe</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe (si admin)">
+                    <small class="text-muted">Requis uniquement pour les administrateurs</small>
+                </div>
+                
                 <button type="submit" class="btn btn-dark w-100 mt-3"><i class="bi bi-box-arrow-in-right"></i> Se connecter</button>
             </form>
             

@@ -23,20 +23,31 @@ class AuthController {
         }
         
         $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
         
         if (!empty($email)) {
             $user = $this->userModel->getUserByEmail($email);
             
             if ($user) {
-                // Utilisateur trouvé - créer la session
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_email'] = $user['email'];
-                $_SESSION['user_nom'] = $user['nom'];
-                $_SESSION['user_prenom'] = $user['prenom'];
-                $_SESSION['user_is_admin'] = $user['is_admin'];
-                
-                header('Location: index.php');
-                exit();
+                // Vérifier si l'utilisateur a un mot de passe (admin)
+                if (!empty($user['password'])) {
+                    // Authentification avec mot de passe
+                    if (!empty($password) && password_verify($password, $user['password'])) {
+                        // Mot de passe correct
+                        $this->createSession($user);
+                        header('Location: index.php');
+                        exit();
+                    } else {
+                        $_SESSION['error_message'] = "Mot de passe incorrect.";
+                        header('Location: index.php?action=login');
+                        exit();
+                    }
+                } else {
+                    // Authentification sans mot de passe (employés normaux)
+                    $this->createSession($user);
+                    header('Location: index.php');
+                    exit();
+                }
             } else {
                 $_SESSION['error_message'] = "Aucun utilisateur trouvé avec cet email.";
                 header('Location: index.php?action=login');
@@ -47,6 +58,15 @@ class AuthController {
             header('Location: index.php?action=login');
             exit();
         }
+    }
+    
+    // Créer la session utilisateur
+    private function createSession($user) {
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_email'] = $user['email'];
+        $_SESSION['user_nom'] = $user['nom'];
+        $_SESSION['user_prenom'] = $user['prenom'];
+        $_SESSION['user_is_admin'] = $user['is_admin'];
     }
     
     // Déconnexion

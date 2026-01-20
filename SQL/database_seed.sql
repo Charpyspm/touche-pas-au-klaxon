@@ -6,6 +6,18 @@
 USE touche_pas_au_klaxon;
 
 -- =============================================================================
+-- Nettoyage des tables (pour éviter les doublons)
+-- =============================================================================
+DELETE FROM trajets;
+DELETE FROM users;
+DELETE FROM agences;
+
+-- Réinitialiser les auto-increment
+ALTER TABLE trajets AUTO_INCREMENT = 1;
+ALTER TABLE users AUTO_INCREMENT = 1;
+ALTER TABLE agences AUTO_INCREMENT = 1;
+
+-- =============================================================================
 -- Insertion des agences (villes/sites)
 -- =============================================================================
 INSERT INTO agences (nom) VALUES
@@ -25,6 +37,11 @@ INSERT INTO agences (nom) VALUES
 -- =============================================================================
 -- Insertion des utilisateurs (employés)
 -- =============================================================================
+-- Compte admin avec mot de passe "admin123" (hashé)
+INSERT INTO users (nom, prenom, telephone, email, password, is_admin) VALUES
+('Admin', 'Administrateur', '0600000000', 'admin@admin.fr', '$2y$10$pCbVooG28HbfsrTb4B6Q6uQAUusQOECGDlhL0EH4C7TyF9Ma0D3oa', TRUE);
+
+-- Employés normaux (sans mot de passe)
 INSERT INTO users (nom, prenom, telephone, email, is_admin) VALUES
 ('Martin', 'Alexandre', '0612345678', 'alexandre.martin@email.fr', FALSE),
 ('Dubois', 'Sophie', '0698765432', 'sophie.dubois@email.fr', FALSE),
