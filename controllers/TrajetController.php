@@ -9,7 +9,8 @@ class TrajetController {
     
     // Afficher la liste des trajets
     public function index() {
-        $trajets = $this->trajetModel->getAllTrajets();
+        // Only show trajets with available places on homepage
+        $trajets = $this->trajetModel->getAvailableTrajets();
         
         $isConnected = isset($_SESSION['user_id']);
         $userName = '';
@@ -66,7 +67,7 @@ class TrajetController {
         
         if (empty($agence_depart_id) || empty($agence_arrivee_id) || empty($date_depart) || 
             empty($heure_depart) || empty($date_arrivee) || empty($heure_arrivee) || 
-            empty($nombre_places_total)) {
+            !isset($_POST['nombre_places_total']) || $_POST['nombre_places_total'] === '') {
             $_SESSION['error_message'] = "Tous les champs sont obligatoires.";
             header('Location: index.php?action=create');
             exit();
@@ -181,7 +182,7 @@ class TrajetController {
         
         if (empty($trajet_id) || empty($agence_depart_id) || empty($agence_arrivee_id) || 
             empty($date_depart) || empty($heure_depart) || empty($date_arrivee) || 
-            empty($heure_arrivee) || empty($nombre_places_total)) {
+            empty($heure_arrivee) || !isset($_POST['nombre_places_total']) || $_POST['nombre_places_total'] === '') {
             $_SESSION['error_message'] = "Tous les champs sont obligatoires.";
             header('Location: index.php?action=edit&id=' . $trajet_id);
             exit();
