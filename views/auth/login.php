@@ -64,22 +64,19 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="password" class="form-label fw-bold"><i class="bi bi-lock"></i> Mot de passe</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe (si admin)">
-                    <small class="text-muted">Requis uniquement pour les administrateurs</small>
+                    <label for="password" class="form-label fw-bold"><i class="bi bi-lock"></i> Mot de passe *</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Votre mot de passe" required> 
                 </div>
                 
                 <button type="submit" class="btn btn-dark w-100 mt-3"><i class="bi bi-box-arrow-in-right"></i> Se connecter</button>
             </form>
             
-            <div class="back-link">
-                <p>Pas encore de compte ? <a href="inscription.php">S'inscrire</a></p>
-            </div>
+            
         </div>
     </div>
 
     <footer class="mt-5">
-        <p class="text-center text-muted">&copy; <?php echo date('Y'); ?> - CENEF - <a href="#">MVC PHP</a></p>
+        <p class="text-center text-muted">&copy; <?php echo date('Y'); ?> Touche pas au klaxon - CHARPENTIER Maxence</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

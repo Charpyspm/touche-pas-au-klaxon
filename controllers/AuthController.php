@@ -25,36 +25,28 @@ class AuthController {
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
         
-        if (!empty($email)) {
+        if (!empty($email) && !empty($password)) {
             $user = $this->userModel->getUserByEmail($email);
             
             if ($user) {
-                // Vérifier si l'utilisateur a un mot de passe (admin)
-                if (!empty($user['password'])) {
-                    // Authentification avec mot de passe
-                    if (!empty($password) && password_verify($password, $user['password'])) {
-                        // Mot de passe correct
-                        $this->createSession($user);
-                        header('Location: index.php');
-                        exit();
-                    } else {
-                        $_SESSION['error_message'] = "Mot de passe incorrect.";
-                        header('Location: index.php?action=login');
-                        exit();
-                    }
-                } else {
-                    // Authentification sans mot de passe (employés normaux)
+                // Vérifier le mot de passe
+                if (!empty($user['password']) && password_verify($password, $user['password'])) {
+                    // Mot de passe correct
                     $this->createSession($user);
                     header('Location: index.php');
                     exit();
+                } else {
+                    $_SESSION['error_message'] = "Email ou mot de passe incorrect.";
+                    header('Location: index.php?action=login');
+                    exit();
                 }
             } else {
-                $_SESSION['error_message'] = "Aucun utilisateur trouvé avec cet email.";
+                $_SESSION['error_message'] = "Email ou mot de passe incorrect.";
                 header('Location: index.php?action=login');
                 exit();
             }
         } else {
-            $_SESSION['error_message'] = "Veuillez entrer votre email.";
+            $_SESSION['error_message'] = "Veuillez entrer votre email et votre mot de passe.";
             header('Location: index.php?action=login');
             exit();
         }

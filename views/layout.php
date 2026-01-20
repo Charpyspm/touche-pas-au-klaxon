@@ -46,7 +46,7 @@
 
     <footer class="mt-5">
         <p class="text-center text-muted">
-            &copy; <?php echo date('Y'); ?> - CENEF - <a href="#">MVC PHP</a>
+            &copy; <?php echo date('Y'); ?> Touche pas au klaxon - CHARPENTIER Maxence
         </p>
     </footer>
 
