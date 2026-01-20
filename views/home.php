@@ -4,27 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Touche pas au klaxon</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
     <link rel="stylesheet" href="public/css/style.css">
     <style>
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border: 1px solid #c3e6cb;
-            text-align: center;
-        }
-        
-        .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border: 1px solid #f5c6cb;
-            text-align: center;
-        }
         
         .action-icons {
             display: flex;
@@ -130,37 +116,39 @@
     <header>
         <div class="logo">Touche pas au klaxon</div>
         <?php if ($isConnected): ?>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <a href="creer_trajet.php" class="btn-connexion" style="background-color: #444;">Créer un trajet</a>
-                <span style="color: #333; font-weight: 500; font-size: 16px;">Bonjour <?php echo htmlspecialchars($userName); ?></span>
-                <a href="logout.php" class="btn-connexion">Déconnexion</a>
+            <div class="d-flex align-items-center gap-3">
+                <a href="index.php?action=create" class="btn btn-secondary"><i class="bi bi-plus-circle"></i> Créer un trajet</a>
+                <span class="text-dark fw-medium"><i class="bi bi-person-circle"></i> Bonjour <?php echo htmlspecialchars($userName); ?></span>
+                <a href="index.php?action=logout" class="btn btn-dark"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
             </div>
         <?php else: ?>
-            <a href="connexion.php" class="btn-connexion">Connexion</a>
+            <a href="index.php?action=login" class="btn btn-dark"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
         <?php endif; ?>
     </header>
 
     <div class="container">
         <?php if (!empty($success_message)): ?>
-            <div class="success-message">
-                <?php echo htmlspecialchars($success_message); ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle"></i> <?php echo htmlspecialchars($success_message); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         <?php endif; ?>
         
         <?php if (!empty($error_message)): ?>
-            <div class="error-message">
-                <?php echo htmlspecialchars($error_message); ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> <?php echo htmlspecialchars($error_message); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         <?php endif; ?>
         
         <?php if ($isConnected): ?>
-            <h2 style="margin-bottom: 20px;">Trajets proposés</h2>
+            <h2 class="mb-4">Trajets proposés</h2>
         <?php else: ?>
-            <p class="message">Pour obtenir plus d'informations sur un trajet, veuillez vous connecter</p>
+            <p class="text-center mb-4 fs-5">Pour obtenir plus d'informations sur un trajet, veuillez vous connecter</p>
         <?php endif; ?>
         
-        <table>
-            <thead>
+        <table class="table table-hover table-striped">
+            <thead class="table-dark">
                 <tr>
                     <th>Départ</th>
                     <th>Date</th>
@@ -189,8 +177,8 @@
                                 <td>
                                     <div class="action-icons">
                                         <?php if ($trajet['user_id'] == $_SESSION['user_id']): ?>
-                                            <a href="modifier_trajet.php?id=<?php echo $trajet['id']; ?>" class="icon-edit" title="Modifier">✏️</a>
-                                            <a href="supprimer_trajet.php?id=<?php echo $trajet['id']; ?>" class="icon-delete" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce trajet ?');">🗑️</a>
+                                            <a href="index.php?action=edit&id=<?php echo $trajet['id']; ?>" class="icon-edit" title="Modifier">✏️</a>
+                                            <a href="index.php?action=delete&id=<?php echo $trajet['id']; ?>" class="icon-delete" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce trajet ?');">🗑️</a>
                                         <?php else: ?>
                                             <a href="#" class="icon-view" data-trajet-id="<?php echo $trajet['id']; ?>" title="Voir les détails">👁️</a>
                                         <?php endif; ?>
@@ -236,7 +224,7 @@
     <script>
         // Fonction pour ouvrir la modal
         function openModal(trajetId) {
-            fetch('get_trajet_details.php?id=' + trajetId)
+            fetch('index.php?action=details&id=' + trajetId)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -284,8 +272,11 @@
         });
     </script>
 
-    <footer>
-        <p>&copy; 2024 - CENEF - <a href="#">MVC PHP</a></p>
+    <footer class="mt-5">
+        <p class="text-center text-muted">&copy; <?php echo date('Y'); ?> - CENEF - <a href="#">MVC PHP</a></p>
     </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

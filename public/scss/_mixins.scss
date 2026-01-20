@@ -1,0 +1,60 @@
+// Mixins pour faciliter le développement
+
+// Flexbox center
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+// Flexbox between
+@mixin flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+// Box shadow
+@mixin box-shadow($shadow: $box-shadow) {
+    box-shadow: $shadow;
+}
+
+// Border radius
+@mixin border-radius($radius: $border-radius) {
+    border-radius: $radius;
+}
+
+// Button base
+@mixin button-base {
+    padding: 10px 25px;
+    border: none;
+    @include border-radius(5px);
+    cursor: pointer;
+    font-size: $font-size-lg;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+// Responsive breakpoints
+@mixin mobile {
+    @media (max-width: #{$mobile}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (max-width: #{$tablet}) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: #{$desktop}) {
+        @content;
+    }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "touche-pas-au-klaxon",
+  "version": "1.0.0",
+  "description": "Application de covoiturage intra-entreprise",
+  "scripts": {
+    "sass": "sass public/scss/style.scss public/css/style.css",
+    "sass:watch": "sass --watch public/scss/style.scss:public/css/style.css",
+    "sass:build": "sass public/scss/style.scss public/css/style.css --style compressed"
+  },
+  "devDependencies": {
+    "sass": "^1.69.5"
+  }
+}

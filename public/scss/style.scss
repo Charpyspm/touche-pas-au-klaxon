@@ -1,0 +1,316 @@
+// Import Bootstrap depuis CDN (sera inclus dans le HTML)
+// Import des variables et mixins personnalisés
+@import 'variables';
+@import 'mixins';
+
+// Reset et base
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: $font-family-base;
+    background-color: $light-bg;
+    color: $primary-color;
+    padding: $spacing-lg;
+}
+
+// Header
+header {
+    background-color: $white;
+    border: 2px solid $primary-color;
+    @include border-radius;
+    padding: $spacing-md $spacing-xl;
+    margin-bottom: $spacing-xl;
+    @include flex-between;
+
+    .logo {
+        font-size: $font-size-xl;
+        font-weight: bold;
+        color: $primary-color;
+    }
+}
+
+// Buttons
+.btn-connexion {
+    @include button-base;
+    background-color: $primary-color;
+    color: $white;
+    
+    &:hover {
+        background-color: lighten($primary-color, 10%);
+    }
+}
+
+// Container
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+// Messages
+.message {
+    text-align: center;
+    margin-bottom: $spacing-lg;
+    font-size: $font-size-lg;
+}
+
+.success-message {
+    background-color: lighten($success-color, 45%);
+    color: darken($success-color, 20%);
+    padding: $spacing-md;
+    @include border-radius(5px);
+    margin-bottom: $spacing-lg;
+    border: 1px solid lighten($success-color, 30%);
+    text-align: center;
+}
+
+.error-message {
+    background-color: lighten($danger-color, 40%);
+    color: darken($danger-color, 20%);
+    padding: $spacing-md;
+    @include border-radius(5px);
+    margin-bottom: $spacing-lg;
+    border: 1px solid lighten($danger-color, 30%);
+    text-align: center;
+}
+
+// Tables
+table {
+    width: 100%;
+    background-color: $white;
+    @include border-radius;
+    overflow: hidden;
+    @include box-shadow;
+    
+    thead {
+        background-color: $primary-color;
+        color: $white;
+        
+        th {
+            padding: $spacing-md;
+            text-align: left;
+            font-weight: bold;
+        }
+    }
+    
+    tbody {
+        tr {
+            border-bottom: 1px solid lighten($primary-color, 60%);
+            
+            &:hover {
+                background-color: lighten($primary-color, 70%);
+            }
+            
+            td {
+                padding: $spacing-sm;
+            }
+        }
+    }
+}
+
+// Action icons
+.action-icons {
+    @include flex-center;
+    gap: $spacing-sm;
+    
+    a {
+        text-decoration: none;
+        font-size: 18px;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+        
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+    
+    .icon-view { color: $primary-color; }
+    .icon-edit { color: $info-color; }
+    .icon-delete { color: $danger-color; }
+}
+
+// Modal
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    @include flex-center;
+    
+    &.show {
+        display: flex;
+    }
+    
+    .modal-content {
+        background-color: $white;
+        padding: $spacing-xl;
+        @include border-radius;
+        max-width: 500px;
+        width: 90%;
+        @include box-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
+        position: relative;
+        
+        h3 {
+            margin-bottom: $spacing-lg;
+            text-align: center;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: $spacing-md;
+            right: $spacing-lg;
+            font-size: 28px;
+            font-weight: bold;
+            color: $primary-color;
+            cursor: pointer;
+            background: none;
+            border: none;
+            
+            &:hover {
+                color: darken($primary-color, 20%);
+            }
+        }
+    }
+    
+    .modal-info {
+        margin-bottom: $spacing-md;
+        line-height: 1.6;
+        
+        strong {
+            display: inline-block;
+            width: 180px;
+        }
+    }
+    
+    .modal-footer {
+        text-align: center;
+        margin-top: 25px;
+    }
+    
+    .btn-close-modal {
+        @include button-base;
+        background-color: lighten($primary-color, 20%);
+        color: $white;
+        
+        &:hover {
+            background-color: lighten($primary-color, 10%);
+        }
+    }
+}
+
+// Forms
+.form-container {
+    max-width: 600px;
+    margin: $spacing-xl auto;
+    background-color: $white;
+    padding: $spacing-xl;
+    @include border-radius;
+    @include box-shadow;
+    
+    h2 {
+        text-align: center;
+        margin-bottom: $spacing-xl;
+    }
+}
+
+.form-group {
+    margin-bottom: $spacing-lg;
+    
+    label {
+        display: block;
+        margin-bottom: $spacing-xs;
+        font-weight: bold;
+    }
+    
+    input,
+    select {
+        width: 100%;
+        padding: $spacing-sm;
+        border: 1px solid lighten($primary-color, 50%);
+        @include border-radius(5px);
+        font-size: $font-size-base;
+        box-sizing: border-box;
+        
+        &:focus {
+            outline: none;
+            border-color: $info-color;
+        }
+    }
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+    
+    @include tablet {
+        grid-template-columns: 1fr;
+    }
+}
+
+.btn-submit {
+    width: 100%;
+    @include button-base;
+    background-color: $primary-color;
+    color: $white;
+    margin-top: $spacing-sm;
+    
+    &:hover {
+        background-color: lighten($primary-color, 10%);
+    }
+}
+
+// Footer
+footer {
+    margin-top: $spacing-xl;
+    text-align: center;
+    
+    p {
+        color: lighten($primary-color, 30%);
+        
+        a {
+            color: $primary-color;
+            text-decoration: none;
+            
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+// Login container
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: $white;
+    padding: $spacing-xl;
+    @include border-radius;
+    @include box-shadow;
+    
+    h2 {
+        text-align: center;
+        margin-bottom: $spacing-xl;
+    }
+}
+
+.back-link {
+    text-align: center;
+    margin-top: $spacing-lg;
+    
+    a {
+        color: $primary-color;
+        text-decoration: none;
+        
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
