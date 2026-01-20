@@ -13,14 +13,14 @@
 body {
     font-family: $font-family-base;
     background-color: $light-bg;
-    color: $primary-color;
+    color: $color-dark;
     padding: $spacing-lg;
 }
 
 // Header
 header {
     background-color: $white;
-    border: 2px solid $primary-color;
+    border: 2px solid $color-dark;
     @include border-radius;
     padding: $spacing-md $spacing-xl;
     margin-bottom: $spacing-xl;
@@ -29,18 +29,18 @@ header {
     .logo {
         font-size: $font-size-xl;
         font-weight: bold;
-        color: $primary-color;
+        color: $color-dark;
     }
 }
 
 // Buttons
 .btn-connexion {
     @include button-base;
-    background-color: $primary-color;
+    background-color: $color-primary;
     color: $white;
     
     &:hover {
-        background-color: lighten($primary-color, 10%);
+        background-color: $color-primary-dark;
     }
 }
 
@@ -58,22 +58,22 @@ header {
 }
 
 .success-message {
-    background-color: lighten($success-color, 45%);
-    color: darken($success-color, 20%);
+    background-color: lighten($success-color, 48%);
+    color: darken($success-color, 25%);
     padding: $spacing-md;
     @include border-radius(5px);
     margin-bottom: $spacing-lg;
-    border: 1px solid lighten($success-color, 30%);
+    border: 1px solid $success-color;
     text-align: center;
 }
 
 .error-message {
-    background-color: lighten($danger-color, 40%);
-    color: darken($danger-color, 20%);
+    background-color: lighten($danger-color, 45%);
+    color: darken($danger-color, 10%);
     padding: $spacing-md;
     @include border-radius(5px);
     margin-bottom: $spacing-lg;
-    border: 1px solid lighten($danger-color, 30%);
+    border: 1px solid $danger-color;
     text-align: center;
 }
 
@@ -86,7 +86,7 @@ table {
     @include box-shadow;
     
     thead {
-        background-color: $primary-color;
+        background-color: $color-primary;
         color: $white;
         
         th {
@@ -98,10 +98,10 @@ table {
     
     tbody {
         tr {
-            border-bottom: 1px solid lighten($primary-color, 60%);
+            border-bottom: 1px solid lighten($color-primary, 55%);
             
             &:hover {
-                background-color: lighten($primary-color, 70%);
+                background-color: $color-light;
             }
             
             td {
@@ -127,8 +127,8 @@ table {
         }
     }
     
-    .icon-view { color: $primary-color; }
-    .icon-edit { color: $info-color; }
+    .icon-view { color: $color-primary; }
+    .icon-edit { color: $color-primary-dark; }
     .icon-delete { color: $danger-color; }
 }
 
@@ -168,13 +168,13 @@ table {
             right: $spacing-lg;
             font-size: 28px;
             font-weight: bold;
-            color: $primary-color;
+            color: $color-primary;
             cursor: pointer;
             background: none;
             border: none;
             
             &:hover {
-                color: darken($primary-color, 20%);
+                color: $color-primary-dark;
             }
         }
     }
@@ -196,11 +196,11 @@ table {
     
     .btn-close-modal {
         @include button-base;
-        background-color: lighten($primary-color, 20%);
+        background-color: $color-primary;
         color: $white;
         
         &:hover {
-            background-color: lighten($primary-color, 10%);
+            background-color: $color-primary-dark;
         }
     }
 }
@@ -233,14 +233,15 @@ table {
     select {
         width: 100%;
         padding: $spacing-sm;
-        border: 1px solid lighten($primary-color, 50%);
+        border: 1px solid lighten($color-primary, 40%);
         @include border-radius(5px);
         font-size: $font-size-base;
         box-sizing: border-box;
         
         &:focus {
             outline: none;
-            border-color: $info-color;
+            border-color: $color-primary;
+            box-shadow: 0 0 0 2px lighten($color-primary, 50%);
         }
     }
 }
@@ -258,12 +259,12 @@ table {
 .btn-submit {
     width: 100%;
     @include button-base;
-    background-color: $primary-color;
+    background-color: $color-primary;
     color: $white;
     margin-top: $spacing-sm;
     
     &:hover {
-        background-color: lighten($primary-color, 10%);
+        background-color: $color-primary-dark;
     }
 }
 
@@ -273,10 +274,10 @@ footer {
     text-align: center;
     
     p {
-        color: lighten($primary-color, 30%);
+        color: $color-dark;
         
         a {
-            color: $primary-color;
+            color: $color-primary;
             text-decoration: none;
             
             &:hover {
@@ -306,7 +307,7 @@ footer {
     margin-top: $spacing-lg;
     
     a {
-        color: $primary-color;
+        color: $color-primary;
         text-decoration: none;
         
         &:hover {
