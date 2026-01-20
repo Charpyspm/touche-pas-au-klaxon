@@ -2,7 +2,7 @@
 
 Application de covoiturage intra-entreprise développée en PHP avec architecture MVC.
 
-## 📁 Architecture MVC
+## Architecture du projet
 
 ```
 touche-pas-au-klaxon/
@@ -14,6 +14,7 @@ touche-pas-au-klaxon/
 │   └── TrajetController.php    # Gestion des trajets (CRUD)
 ├── models/
 │   ├── User.php               # Modèle utilisateur
+│   ├── Agence.php             # Modèle agence
 │   └── Trajet.php             # Modèle trajet
 ├── views/
 │   ├── home.php               # Page d'accueil (liste des trajets)
@@ -23,168 +24,231 @@ touche-pas-au-klaxon/
 │       ├── create.php         # Formulaire de création
 │       └── edit.php           # Formulaire de modification
 ├── public/
+│   ├── scss/                  # Sources Sass
 │   └── css/
-│       └── style.css          # Feuilles de style
-└── SQL/
-    ├── database_schema.sql    # Structure de la base
-    └── database_seed.sql      # Données de test
-
+│       └── style.css          # Feuilles de style compilées
+├── tests/                     # Tests unitaires PHPUnit
+├── SQL/
+│   ├── database_schema.sql    # Structure de la base
+│   └── database_seed.sql      # Données de test
+├── composer.json              # Dépendances PHP
+├── phpunit.xml                # Configuration PHPUnit
+└── phpstan.neon               # Configuration PHPStan
 ```
 
-## 🎯 Fonctionnalités
+## Fonctionnalités
 
 ### Authentification
-- ✅ Connexion par email uniquement (sans mot de passe)
-- ✅ Gestion des sessions utilisateur
-- ✅ Déconnexion
+- Connexion par email et mot de passe
+- Gestion des sessions utilisateur
+- Rôles : administrateur et employé
+- Déconnexion sécurisée
 
 ### Gestion des trajets
-- ✅ Création de trajets (agences, dates, horaires, places)
-- ✅ Modification de ses propres trajets
-- ✅ Suppression de ses propres trajets
-- ✅ Visualisation des détails via modal popup
-- ✅ Liste de tous les trajets avec filtrage par permissions
+- Création de trajets avec sélection d'agences, dates, horaires et nombre de places
+- Modification de ses propres trajets
+- Suppression de ses propres trajets
+- Visualisation des détails via modal
+- Contrôles de cohérence : agences différentes, dates valides
+- Filtrage automatique : seuls les trajets avec places disponibles s'affichent sur l'accueil
+- Gestion des trajets complets (0 places disponibles)
 
-### Interface
-- Design responsive
-- Modal popup pour les détails
-- Icônes d'actions conditionnelles (modifier/supprimer pour ses trajets, voir pour les autres)
-- Messages de succès/erreur
+### Interface administrateur
+- Liste complète des utilisateurs
+- Gestion CRUD des agences
+- Visualisation et suppression de tous les trajets
+- Interface dédiée accessible uniquement aux administrateurs
 
-## 🔗 Routes (Pattern MVC)
+### Interface utilisateur
+- Design responsive avec Bootstrap 5
+- Modal popup pour les détails des trajets
+- Icônes d'actions conditionnelles selon les permissions
+- Messages de succès et d'erreur contextuels
+
+## Routes principales
 
 | Route | Méthode | Contrôleur | Action | Description |
 |-------|---------|------------|--------|-------------|
 | `/?action=home` | GET | TrajetController | index() | Page d'accueil |
 | `/?action=login` | GET/POST | AuthController | showLoginForm() / login() | Connexion |
 | `/?action=logout` | GET | AuthController | logout() | Déconnexion |
-| `/?action=create` | GET | TrajetController | create() | Formulaire création |
-| `/?action=store` | POST | TrajetController | store() | Enregistrer trajet |
-| `/?action=edit&id=X` | GET | TrajetController | edit() | Formulaire modification |
-| `/?action=update` | POST | TrajetController | update() | Mettre à jour trajet |
-| `/?action=delete&id=X` | GET | TrajetController | delete() | Supprimer trajet |
-| `/?action=details&id=X` | GET | TrajetController | details() | API JSON détails |
+| `/?action=create` | GET | TrajetController | create() | Formulaire de création |
+| `/?action=store` | POST | TrajetController | store() | Enregistrer un trajet |
+| `/?action=edit&id=X` | GET | TrajetController | edit() | Formulaire de modification |
+| `/?action=update` | POST | TrajetController | update() | Mettre à jour un trajet |
+| `/?action=delete&id=X` | GET | TrajetController | delete() | Supprimer un trajet |
+| `/?action=details&id=X` | GET | TrajetController | details() | API JSON pour les détails |
+| `/?action=users` | GET | - | - | API JSON liste utilisateurs (admin) |
+| `/?action=agences` | GET | - | - | API JSON liste agences (admin) |
+| `/?action=trajets_admin` | GET | - | - | API JSON tous les trajets (admin) |
 
-## 🗄️ Base de données
+## Base de données
 
-### Tables principales
-- **users** : Employés de l'entreprise
-- **agences** : Villes/sites de l'entreprise
-- **trajets** : Covoiturages proposés
+### Tables
+- **users** : Employés et administrateurs avec authentification
+- **agences** : Sites de l'entreprise
+- **trajets** : Covoiturages proposés avec places disponibles
 
-### Relations
+### Relations et contraintes
 - Un trajet appartient à un utilisateur (conducteur)
-- Un trajet a une agence de départ et une agence d'arrivée
+- Un trajet a une agence de départ et une agence d'arrivée distinctes
+- La date d'arrivée doit être postérieure à la date de départ
+- Le nombre de places disponibles ne peut excéder le total
+- Une agence ne peut être supprimée si elle est utilisée dans des trajets
 
-## 🚀 Installation
+## Installation
 
-1. Placez le projet dans `C:\wamp64\www\touche-pas-au-klaxon`
-2. Importez `SQL/database_schema.sql` dans phpMyAdmin
-3. Importez `SQL/database_seed.sql` pour les données de test
-4. Accédez à `http://localhost/touche-pas-au-klaxon`
+### Prérequis
+- WAMP Server (ou Apache + MySQL + PHP 7.4+)
+- Node.js et npm
+- Composer
 
-## 🔧 Configuration
+### Étapes d'installation
 
-La configuration de la base de données se trouve dans `config/database.php` :
+1. Cloner le projet dans le répertoire web
+   ```
+   C:\wamp64\www\touche-pas-au-klaxon
+   ```
+
+2. Créer et configurer la base de données
+   - Ouvrir phpMyAdmin : `http://localhost/phpmyadmin`
+   - Créer la base `touche_pas_au_klaxon`
+   - Importer `SQL/database_schema.sql`
+   - Importer `SQL/database_seed.sql`
+
+3. Installer les dépendances PHP
+   ```bash
+   php composer.phar install
+   ```
+
+4. Installer les dépendances Node.js
+   ```bash
+   npm install
+   ```
+
+5. Compiler les fichiers Sass
+   ```bash
+   npm run sass
+   ```
+
+6. Accéder à l'application
+   ```
+   http://localhost/touche-pas-au-klaxon
+   ```
+
+### Comptes de test
+
+Après l'import de `database_seed.sql` :
+
+- **Administrateur** : admin@admin.fr / admin123
+- **Employés** : email selon database_seed.sql / mot de passe = première lettre du prénom + première lettre du nom (ex: Alexandre Martin = am)
+
+## Configuration
+
+La configuration de la base se trouve dans `config/database.php`. Pour les tests, les variables d'environnement sont définies dans `phpunit.xml` et utilisent une base dédiée `touche_pas_au_klaxon_test`.
+
+Configuration par défaut :
 - Hôte : localhost
 - Base : touche_pas_au_klaxon
 - Utilisateur : root
 - Mot de passe : (vide)
 
-## 📝 Pattern MVC appliqué
+## Architecture MVC
 
 ### Model (Modèle)
-- Gère l'accès aux données
-- Interaction avec la base de données via PDO
-- Classes : `User`, `Trajet`
+Les modèles gèrent l'accès aux données et les interactions avec la base de données via PDO.
+
+- `User.php` : Gestion des utilisateurs
+- `Agence.php` : CRUD complet des agences avec vérification d'utilisation
+- `Trajet.php` : Récupération des trajets avec filtrage selon disponibilité
 
 ### View (Vue)
-- Présentation pure (HTML/CSS)
-- Pas de logique métier
-- Affichage des données passées par le contrôleur
+Les vues sont responsables uniquement de l'affichage. Elles reçoivent les données des contrôleurs et les présentent en HTML/CSS sans logique métier.
 
 ### Controller (Contrôleur)
-- Logique métier
-- Traitement des requêtes
-- Validation des données
-- Appel des modèles et des vues
-- Classes : `AuthController`, `TrajetController`
+Les contrôleurs orchestrent la logique applicative.
 
-## 🛠️ Technologies
+- `AuthController.php` : Authentification et sessions
+- `TrajetController.php` : CRUD des trajets avec validations métier
 
-- **Backend** : PHP 7.4+
-- **Base de données** : MySQL via PDO
-- **Frontend** : 
-  - HTML5, CSS3, JavaScript (vanilla)
-  - **Bootstrap 5** (via CDN) - Framework CSS responsive
-  - **Bootstrap Icons** - Bibliothèque d'icônes
-  - **Sass** (SCSS) - Préprocesseur CSS
-- **Serveur** : WAMP Server
-- **Architecture** : MVC (Model-View-Controller)
-- **Outils de build** : npm, Sass compiler
+Le front controller (`index.php`) route les requêtes vers le bon contrôleur.
 
-## 📦 Installation complète
+## Technologies utilisées
 
-### Prérequis
-- WAMP Server
-- Node.js (pour Sass)
+### Backend
+- PHP 8.3 avec PDO pour l'accès aux données
+- Architecture MVC stricte
+- Sessions pour l'authentification
 
-### Étapes
+### Frontend
+- HTML5 et CSS3
+- JavaScript vanilla pour les interactions
+- Bootstrap 5.3.0 (via CDN) pour le design responsive
+- Bootstrap Icons 1.11.0 pour les icônes
+- Sass (SCSS) pour le préprocessing CSS
 
-1. **Cloner/Placer le projet**
-   ```
-   C:\wamp64\www\touche-pas-au-klaxon
-   ```
+### Outils de qualité
+- **PHPStan** : Analyse statique du code (niveau 6)
+- **PHPUnit** : Tests unitaires avec couverture des opérations d'écriture
+- Documentation complète avec DocBlock
 
-2. **Base de données**
-   - Ouvrir phpMyAdmin : `http://localhost/phpmyadmin`
-   - Importer `SQL/database_schema.sql`
-   - Importer `SQL/database_seed.sql`
+### Développement
+- Sass pour la compilation CSS
+- npm pour la gestion des dépendances frontend
+- Composer pour les dépendances PHP
 
-3. **Installer les dépendances Node.js**
-   ```bash
-   npm install
-   ```
+## Scripts npm disponibles
 
-4. **Compiler le Sass**
-   ```bash
-   npm run sass
-   # Ou pour le mode watch (auto-compilation)
-   npm run sass:watch
-   ```
-
-5. **Accéder à l'application**
-   ```
-   http://localhost/touche-pas-au-klaxon
-   ```
-
-## 🎨 Styles et Design
-
-### Bootstrap 5
-- Intégré via CDN
-- Classes utilitaires disponibles
-- Composants responsive (grilles, boutons, modals, etc.)
-- Documentation : https://getbootstrap.com/
-
-### Sass (SCSS)
-Structure des fichiers :
-```
-public/
-├── scss/
-│   ├── _variables.scss    # Variables personnalisables
-│   ├── _mixins.scss       # Mixins réutilisables
-│   └── style.scss         # Fichier principal
-└── css/
-    └── style.css          # CSS compilé (généré automatiquement)
+```bash
+npm run sass          # Compilation Sass une fois
+npm run sass:watch    # Mode watch avec recompilation automatique
+npm run sass:build    # Compilation minifiée pour la production
 ```
 
-**Commandes Sass :**
-- `npm run sass` - Compilation unique
-- `npm run sass:watch` - Mode watch (auto-compilation)
-- `npm run sass:build` - Compilation minifiée (production)
+Important : ne jamais modifier directement le fichier `style.css`, toujours passer par les fichiers SCSS.
 
-**Note :** Modifiez uniquement les fichiers `.scss`, jamais le `style.css` directement !
+## Tests unitaires
+
+Le projet inclut une suite de tests PHPUnit couvrant les opérations d'écriture en base de données.
+
+### Exécution des tests
+```bash
+php vendor/bin/phpunit              # Tous les tests
+php vendor/bin/phpunit --testdox    # Format lisible
+php vendor/bin/phpunit tests/AgenceTest.php  # Tests spécifiques
+```
+
+### Couverture
+Les tests valident :
+- Création, modification et suppression des agences
+- Protection contre la suppression d'agences utilisées
+- Création, modification et suppression des trajets
+- Gestion des places disponibles (y compris 0)
+- Contrôle des permissions utilisateur
+
+La base de test `touche_pas_au_klaxon_test` est créée automatiquement et nettoyée après chaque test.
+
+## Analyse de code
+
+Le projet utilise PHPStan pour garantir la qualité du code.
+
+```bash
+php vendor/bin/phpstan analyse
+```
+
+Configuration niveau 6 avec typage strict des méthodes et propriétés.
+
+## Structure Sass
+
+```
+public/scss/
+├── _variables.scss    # Variables de couleurs, tailles, etc.
+├── _mixins.scss       # Mixins réutilisables
+└── style.scss         # Point d'entrée principal
+```
+
+Le fichier compilé `public/css/style.css` est généré automatiquement et ne doit pas être édité manuellement.
 
 ---
 
-© 2024 - CENEF - MVC PHP
+Projet développé dans le cadre de la formation CENEF

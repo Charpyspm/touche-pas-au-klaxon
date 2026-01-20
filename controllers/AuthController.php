@@ -1,13 +1,40 @@
 <?php
+/**
+ * Fichier du contrôleur d'authentification
+ * 
+ * Gère toutes les opérations liées à l'authentification des utilisateurs
+ * 
+ * @package TouchePasAuKlaxon
+ * @author Votre Nom
+ * @version 1.0
+ */
+
+/**
+ * Classe AuthController
+ * 
+ * Contrôleur pour la gestion de l'authentification (connexion/déconnexion)
+ */
 class AuthController {
+    /**
+     * @var User Instance du modèle User
+     */
     private $userModel;
     
+    /**
+     * Constructeur de la classe AuthController
+     * 
+     * Initialise le modèle User
+     */
     public function __construct() {
         require_once __DIR__ . '/../models/User.php';
         $this->userModel = new User();
     }
     
-    // Afficher le formulaire de connexion
+    /**
+     * Affiche le formulaire de connexion
+     * 
+     * @return void
+     */
     public function showLoginForm() {
         $error_message = $_SESSION['error_message'] ?? '';
         unset($_SESSION['error_message']);
@@ -15,7 +42,13 @@ class AuthController {
         require_once __DIR__ . '/../views/auth/login.php';
     }
     
-    // Traiter la connexion
+    /**
+     * Traite la soumission du formulaire de connexion
+     * 
+     * Vérifie les identifiants de l'utilisateur et crée une session si valides
+     * 
+     * @return void Redirige vers l'accueil ou le formulaire de connexion
+     */
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: index.php?action=login');
@@ -52,7 +85,14 @@ class AuthController {
         }
     }
     
-    // Créer la session utilisateur
+    /**
+     * Crée une session utilisateur
+     * 
+     * Stocke les informations de l'utilisateur dans la session
+     * 
+     * @param array<string, mixed> $user Les données de l'utilisateur
+     * @return void
+     */
     private function createSession($user) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
@@ -61,7 +101,13 @@ class AuthController {
         $_SESSION['user_is_admin'] = $user['is_admin'];
     }
     
-    // Déconnexion
+    /**
+     * Déconnecte l'utilisateur
+     * 
+     * Détruit la session et redirige vers la page d'accueil
+     * 
+     * @return void
+     */
     public function logout() {
         $_SESSION = array();
         

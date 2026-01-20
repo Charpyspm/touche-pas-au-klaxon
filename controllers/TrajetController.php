@@ -1,13 +1,42 @@
 <?php
+/**
+ * Fichier du contrôleur des trajets
+ * 
+ * Gère toutes les opérations CRUD liées aux trajets de covoiturage
+ * 
+ * @package TouchePasAuKlaxon
+ * @author Votre Nom
+ * @version 1.0
+ */
+
+/**
+ * Classe TrajetController
+ * 
+ * Contrôleur pour la gestion des trajets (création, modification, suppression, affichage)
+ */
 class TrajetController {
+    /**
+     * @var Trajet Instance du modèle Trajet
+     */
     private $trajetModel;
     
+    /**
+     * Constructeur de la classe TrajetController
+     * 
+     * Initialise le modèle Trajet
+     */
     public function __construct() {
         require_once __DIR__ . '/../models/Trajet.php';
         $this->trajetModel = new Trajet();
     }
     
-    // Afficher la liste des trajets
+    /**
+     * Affiche la liste des trajets disponibles sur la page d'accueil
+     * 
+     * Ne montre que les trajets avec des places disponibles
+     * 
+     * @return void
+     */
     public function index() {
         // Only show trajets with available places on homepage
         $trajets = $this->trajetModel->getAvailableTrajets();
@@ -25,7 +54,13 @@ class TrajetController {
         require_once __DIR__ . '/../views/home.php';
     }
     
-    // Afficher le formulaire de création
+    /**
+     * Affiche le formulaire de création d'un trajet
+     * 
+     * Nécessite une connexion utilisateur
+     * 
+     * @return void Redirige vers login si non connecté
+     */
     public function create() {
         if (!isset($_SESSION['user_id'])) {
             header('Location: index.php?action=login');
@@ -49,7 +84,16 @@ class TrajetController {
         require_once __DIR__ . '/../views/trajet/create.php';
     }
     
-    // Enregistrer un nouveau trajet
+    /**
+     * Enregistre un nouveau trajet dans la base de données
+     * 
+     * Valide les données et effectue les contrôles de cohérence :
+     * - Vérifie que tous les champs sont remplis
+     * - Vérifie que l'agence de départ est différente de l'agence d'arrivée
+     * - Vérifie que la date/heure d'arrivée est postérieure à celle de départ
+     * 
+     * @return void Redirige vers l'accueil si succès, sinon vers le formulaire
+     */
     public function store() {
         if (!isset($_SESSION['user_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: index.php');
@@ -121,7 +165,13 @@ class TrajetController {
         }
     }
     
-    // Afficher le formulaire de modification
+    /**
+     * Affiche le formulaire de modification d'un trajet
+     * 
+     * Vérifie que l'utilisateur connecté est le créateur du trajet
+     * 
+     * @return void Redirige vers l'accueil si le trajet n'existe pas ou n'appartient pas à l'utilisateur
+     */
     public function edit() {
         if (!isset($_SESSION['user_id'])) {
             header('Location: index.php?action=login');
@@ -164,7 +214,13 @@ class TrajetController {
         require_once __DIR__ . '/../views/trajet/edit.php';
     }
     
-    // Mettre à jour un trajet
+    /**
+     * Met à jour un trajet existant
+     * 
+     * Valide les données et effectue les mêmes contrôles que lors de la création
+     * 
+     * @return void Redirige vers l'accueil si succès, sinon vers le formulaire de modification
+     */
     public function update() {
         if (!isset($_SESSION['user_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: index.php');
@@ -239,7 +295,13 @@ class TrajetController {
         }
     }
     
-    // Supprimer un trajet
+    /**
+     * Supprime un trajet
+     * 
+     * Vérifie que l'utilisateur connecté est le créateur du trajet avant suppression
+     * 
+     * @return void Redirige vers l'accueil avec un message de succès ou d'erreur
+     */
     public function delete() {
         if (!isset($_SESSION['user_id'])) {
             header('Location: index.php?action=login');
@@ -276,7 +338,13 @@ class TrajetController {
         exit();
     }
     
-    // Obtenir les détails d'un trajet (API JSON)
+    /**
+     * Retourne les détails d'un trajet au format JSON
+     * 
+     * Utilisé pour afficher les informations complètes dans une modal
+     * 
+     * @return void Affiche un JSON avec les détails du trajet ou une erreur
+     */
     public function details() {
         if (!isset($_SESSION['user_id'])) {
             echo json_encode(['error' => 'Non connecté']);
