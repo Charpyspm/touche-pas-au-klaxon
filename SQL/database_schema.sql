@@ -62,7 +62,7 @@ CREATE TABLE trajets (
     -- Contraintes de validation
     CHECK (agence_depart_id != agence_arrivee_id),
     CHECK (date_arrivee > date_depart),
-    CHECK (nombre_places_total > 0),
+    CHECK (nombre_places_total >= 0),
     CHECK (nombre_places_disponibles >= 0),
     CHECK (nombre_places_disponibles <= nombre_places_total),
     

@@ -105,7 +105,7 @@
                 
                 <div class="mb-3">
                     <label for="nombre_places_total" class="form-label fw-bold">Nombre de places disponibles *</label>
-                    <input type="number" id="nombre_places_total" name="nombre_places_total" class="form-control" min="1" max="8" required>
+                    <input type="number" id="nombre_places_total" name="nombre_places_total" class="form-control" min="0" max="5" required>
                 </div>
                 
                 <button type="submit" class="btn btn-dark w-100 mt-3"><i class="bi bi-check-circle"></i> Créer le trajet</button>
